@@ -50,7 +50,6 @@ class MainActivity : AppCompatActivity() {
         })
     }
 
-
     private fun setWebView() {
         binding.webViewMain.webChromeClient = object : WebChromeClient() {}
 
@@ -65,18 +64,23 @@ class MainActivity : AppCompatActivity() {
             override fun onPageStarted(view: WebView?, url: String?, favicon: Bitmap?) {
                 super.onPageStarted(view, url, favicon)
                 binding.searchViewMain.setQuery(url, false)
-                //swipeRefresh.isRefreshing = true
+                initSwipe(binding.webViewMain)
             }
 
             override fun onPageFinished(view: WebView?, url: String?) {
                 super.onPageFinished(view, url)
-                //swipeRefresh.isRefreshing = false
             }
 
         }
-
         val settings = binding.webViewMain.settings
         settings.javaScriptEnabled = true
         binding.webViewMain.loadUrl(BASE_URL)
+    }
+
+    private fun initSwipe(webView: WebView) {
+        binding.swipeMain.setOnRefreshListener {
+            webView.reload()
+            binding.swipeMain.isRefreshing = false
+        }
     }
 }
